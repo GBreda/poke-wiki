@@ -11,6 +11,7 @@
   box-shadow: 0px 1px 1px $gray;
   display: flex;
   align-items: center;
+  background-color: $white;
 
   &__logo {
     width: 80px;

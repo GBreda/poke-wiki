@@ -31,7 +31,7 @@ input[type="search"] {
   padding: 14px 0 14px 38px;
   font-size: 14px;
   height: 48px;
-  width: 815px;
+  width: 100%;
   border: 1px solid $gray;
   border-radius: 25px;
 
