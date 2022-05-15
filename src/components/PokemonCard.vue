@@ -1,19 +1,15 @@
 <template>
-  <div class="card" @click="detailPokemon">
-    <img
-      class="card__image"
-      width="96"
-      height="96"
-      :src="image"
-      :alt="altImage"
-    />
-    <p class="card__name">{{ formattedName }}</p>
-    <p class="card__code">Cód: {{ id }}</p>
+  <div class="card pokemon-card" @click="detailPokemon">
+    <img width="96" height="96" :src="image" :alt="altImage" />
+    <p class="pokemon-card__name">{{ formattedName }}</p>
+    <p class="pokemon-card__code">Cód: {{ id }}</p>
   </div>
 </template>
 
 <script setup>
-import { computed, toRefs } from "vue";
+import { computed } from "vue";
+import router from "@/router/index";
+import useCapitalize from "@/composables/useCapitalize";
 
 const props = defineProps({
   pokemon: {
@@ -22,9 +18,7 @@ const props = defineProps({
   },
 });
 
-const { name, url } = toRefs(props.pokemon);
-
-const id = computed(() => url.value.match(/\/([^/]+)\/?$/)[1]);
+const id = computed(() => props.pokemon.url.match(/\/([^/]+)\/?$/)[1]);
 
 const image = computed(
   () =>
@@ -33,22 +27,15 @@ const image = computed(
 
 const altImage = computed(() => `${props.pokemon.name} front default sprite`);
 
-const formattedName = computed(
-  () => `${name.value.charAt(0).toUpperCase()}${name.value.slice(1)}`
-);
+const formattedName = useCapitalize(props.pokemon.name);
 
 const detailPokemon = () => {
-  console.log(id.value);
+  router.push({ path: `/detail/${id.value}` });
 };
 </script>
 
-<style lang="scss">
-.card {
-  border: 1px solid $gray;
-  box-shadow: 0px 2px 8px $gray;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: $white;
+<style lang="scss" scoped>
+.pokemon-card {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -21,7 +21,7 @@ import PokemonCard from "@/components/PokemonCard.vue";
 const placeholder = ref("Pesquise por nome ou código");
 const pokemonsData = ref([]);
 
-const fetchPokemon = async () => {
+const fetchPokemons = async () => {
   try {
     const { data, status } = await PokemonService.fetchPokemons();
 
@@ -33,7 +33,7 @@ const fetchPokemon = async () => {
   }
 };
 
-fetchPokemon();
+fetchPokemons();
 </script>
 
 <style lang="scss" scoped>
