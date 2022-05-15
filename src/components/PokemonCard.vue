@@ -1,8 +1,15 @@
 <template>
   <div class="card pokemon-card" @click="detailPokemon">
-    <img width="96" height="96" :src="image" :alt="altImage" />
-    <p class="pokemon-card__name">{{ formattedName }}</p>
-    <p class="pokemon-card__code">Cód: {{ id }}</p>
+    <div v-if="isLoading" class="loader">
+      <div class="loader__image skeleton"></div>
+      <div class="loader__name skeleton"></div>
+      <div class="loader__code skeleton"></div>
+    </div>
+    <div v-else>
+      <img width="96" height="96" :src="image" :alt="altImage" />
+      <p class="pokemon-card__name">{{ formattedName }}</p>
+      <p class="pokemon-card__code">Cód: {{ id }}</p>
+    </div>
   </div>
 </template>
 
@@ -15,6 +22,10 @@ const props = defineProps({
   pokemon: {
     type: Object,
     required: true,
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -56,6 +67,25 @@ const detailPokemon = () => {
     font-weight: 700;
     font-size: 10px;
     margin-top: 10px;
+  }
+}
+.loader {
+  &__image {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+  }
+
+  &__name {
+    margin: 10px auto 0;
+    width: 80px;
+    height: 14px;
+  }
+
+  &__code {
+    margin: 10px auto 0;
+    width: 40px;
+    height: 14px;
   }
 }
 </style>

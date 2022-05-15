@@ -15,6 +15,7 @@
       v-for="(data, index) in pokemonsData"
       :key="index"
       :pokemon="data"
+      :is-loading="isLoading"
     />
   </div>
 </template>
@@ -30,8 +31,10 @@ import PokemonCard from "@/components/PokemonCard.vue";
 const placeholder = ref("Pesquise por nome ou código");
 const pokemonsData = ref([]);
 const isPokemonListEmpty = ref(false);
+const isLoading = ref(false);
 
 const fetchPokemons = async () => {
+  isLoading.value = true;
   try {
     const { data, status } = await PokemonService.fetchPokemons();
 
@@ -40,6 +43,8 @@ const fetchPokemons = async () => {
     }
   } catch (error) {
     console.log(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
