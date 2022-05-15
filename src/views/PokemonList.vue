@@ -4,13 +4,13 @@
     :placeholder="placeholder"
     @updateSearchInput="search"
   />
-  <p v-show="isPokemonListEmpty" class="error-message">
+  <p v-if="isPokemonListEmpty" class="error-message">
     Nenhum pokemon encontrado!
   </p>
 
   <h1 class="title">Pokémons</h1>
 
-  <div class="cards">
+  <div class="cards" ref="scrollDiv" @wheel="fetchMorePokemons">
     <pokemon-card
       v-for="(data, index) in pokemonsData"
       :key="index"
@@ -32,11 +32,16 @@ const placeholder = ref("Pesquise por nome ou código");
 const pokemonsData = ref([]);
 const isPokemonListEmpty = ref(false);
 const isLoading = ref(false);
+const LIMIT_INCREMENT = 24;
+const limit = ref(24);
+const scrollDiv = ref();
 
 const fetchPokemons = async () => {
   isLoading.value = true;
   try {
-    const { data, status } = await PokemonService.fetchPokemons();
+    const { data, status } = await PokemonService.fetchPokemons({
+      limit: limit.value,
+    });
 
     if (status === httpstatus.OK) {
       pokemonsData.value = data.results;
@@ -70,6 +75,29 @@ const search = (value) => {
   }
   fetchPokemon(value);
 };
+
+let processingMouseWheel = false;
+
+const isPageBottom = (event) => {
+  if (event.deltaY <= 0) {
+    return false;
+  }
+  const pageBottom =
+    scrollDiv.value.scrollHeight - scrollDiv.value.clientHeight;
+
+  return pageBottom === scrollDiv.value.scrollTop;
+};
+
+const fetchMorePokemons = async (event) => {
+  if (processingMouseWheel) return;
+
+  processingMouseWheel = true;
+
+  if (isPageBottom(event)) {
+    await fetchPokemons({ limit: (limit.value += LIMIT_INCREMENT) });
+  }
+  processingMouseWheel = false;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -89,6 +117,8 @@ const search = (value) => {
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  height: 700px;
+  overflow: auto;
 }
 
 .error-message {

@@ -1,6 +1,9 @@
 <template>
   <div class="card detail-card">
-    <img :src="details.sprites.front_default" />
+    <img
+      v-if="details.sprites.front_default"
+      :src="details.sprites.front_default"
+    />
     <p class="detail-card__name">{{ formattedName }}</p>
 
     <div class="chips">

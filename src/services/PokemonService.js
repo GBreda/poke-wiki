@@ -1,11 +1,10 @@
 import ApiClient from "./ApiClientService";
 
 const PokemonService = {
-  fetchPokemons() {
-    return ApiClient.get("/pokemon");
+  fetchPokemons(params) {
+    return ApiClient.get("/pokemon", { params });
   },
   fetchPokemon(query) {
-    console.log(query);
     return ApiClient.get(`/pokemon/${query}`);
   },
 };
